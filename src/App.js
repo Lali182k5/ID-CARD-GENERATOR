@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import IDCard from "./components/IDCard";
+import { motion } from "framer-motion";
 import "./App.css";
 
 export default function App() {
@@ -29,22 +30,62 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
-      <form className="input-form">
-        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-        <input type="text" name="job" placeholder="Job" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="file" accept="image/*" onChange={handleImageChange} required />
-      </form>
+    <motion.div 
+      className="app-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
+      <motion.div
+        className="input-form"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 100 }}
+      >
+        <h2><b>🪪 Generate Your ID Card</b></h2>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="job"
+          placeholder="Job"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+        />
+      </motion.div>
 
       {formData.imagePreview && (
-        <IDCard
-          name={formData.name}
-          job={formData.job}
-          email={formData.email}
-          image={formData.imagePreview}
-        />
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <IDCard
+            name={formData.name}
+            job={formData.job}
+            email={formData.email}
+            image={formData.imagePreview}
+          />
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
