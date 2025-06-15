@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import "./IDCard.css";
-import htmlToImage from "html-to-image";
+import * as htmlToImage from "html-to-image";
 import download from "downloadjs";
+import "./IDCard.css";
 
 export default function IDCard({ name, job, email, image }) {
-  const cardRef = useRef(null);
+  const cardRef = useRef();
 
   const handleDownload = () => {
     htmlToImage.toPng(cardRef.current).then((dataUrl) => {
@@ -22,7 +22,7 @@ export default function IDCard({ name, job, email, image }) {
           <p><span>Email:</span> {email}</p>
         </div>
       </div>
-      <button onClick={handleDownload}>Download</button>
+      <button className="download-btn" onClick={handleDownload}>Download ID Card</button>
     </div>
   );
 }

@@ -1,28 +1,50 @@
-import React, { useRef } from "react";
-import "./IDCard.css";
-import * as htmlToImage from "html-to-image";
-import download from "downloadjs";
+import React, { useState } from "react";
+import IDCard from "./components/IDCard";
+import "./App.css";
 
-export default function IDCard({ name, job, email, image }) {
-  const cardRef = useRef(null);
+export default function App() {
+  const [formData, setFormData] = useState({
+    name: "",
+    job: "",
+    email: "",
+    image: null,
+    imagePreview: null,
+  });
 
-  const handleDownload = () => {
-    htmlToImage.toPng(cardRef.current).then((dataUrl) => {
-      download(dataUrl, `${name}-idcard.png`);
-    });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+        imagePreview: previewUrl,
+      }));
+    }
   };
 
   return (
-    <div>
-      <div className="id-card" ref={cardRef}>
-        <img src={image} alt={name} className="profile-image" />
-        <div className="id-details">
-          <h2><span>Name:</span> {name}</h2>
-          <p><span>Job:</span> {job}</p>
-          <p><span>Email:</span> {email}</p>
-        </div>
-      </div>
-      <button onClick={handleDownload}>Download</button>
+    <div className="app-container">
+      <form className="input-form">
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
+        <input type="text" name="job" placeholder="Job" onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <input type="file" accept="image/*" onChange={handleImageChange} required />
+      </form>
+
+      {formData.imagePreview && (
+        <IDCard
+          name={formData.name}
+          job={formData.job}
+          email={formData.email}
+          image={formData.imagePreview}
+        />
+      )}
     </div>
   );
 }
